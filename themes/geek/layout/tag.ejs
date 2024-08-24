@@ -1,0 +1,54 @@
+<div class="hd post-div">
+    <% if(is_tag()){ %>
+        <div class="tag-name-div">
+            <span class="tag-name-span" >
+                <%=page.tag%>&nbsp;标签下的所有文章
+            </span>
+        </div>
+        <% page.posts.each(function (post) { %>
+            
+            <a class="flink" href="<%- url_for(post.path) %>">
+                <div class="list">
+                    <div class="postname">
+                        <%= post.title %>
+                    </div>
+                    <div class="posttime">
+                        <%- date(post.date) %>
+                    </div>
+                </div>
+            </a>
+        <% }) %>
+        <!-- 仅在分页大于1页时展示分页数据 -->
+        <!--页码-->
+        <section class="page-navigator">
+            <%-paginator({
+            prev_text: '«',
+            next_text: '»',
+            })%>
+        </section>
+    <% }else{ %>
+        <% site.tags.each(function(tag){ %>
+                <a class="tag-row" href="/tags/<%= tag.name %>">
+                    <%= tag.name %>
+                </a>
+        <% }) %>
+    <% } %>
+
+    <script>
+        function getRandomFontSize(min, max) {
+            const size = Math.floor(Math.random() * (max - min + 1)) + min;
+            return size + 'px';
+        }
+        function getRandomColor(){
+            var colors = ['#aaa','#bbb','#ccc','#000','#111','#222','#333','#444','#444','#555','#666','#777','#888','#999'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        const tags = document.querySelectorAll('.tag-row');
+        tags.forEach(tag => {
+            tag.style.color = getRandomColor();
+            tag.style.fontSize = getRandomFontSize(20,45);
+            tag.style.textDecoration = 'none';
+        });
+
+    </script>
+</div>

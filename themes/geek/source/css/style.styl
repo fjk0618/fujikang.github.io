@@ -493,3 +493,23 @@ label.el-checkbox {
 .page-navigator span {
   padding: 0 0.3em;
 }
+
+
+.category-list::after {
+    content: "/";
+    margin: 0 0px; /* 调整竖线与链接之间的间距 */
+    color: #51525d; /* 竖线颜色与链接颜色一致 */
+}
+
+.category-list:last-child::after {
+    content: ""; /* 移除最后一个链接后的竖线 */
+}
+.fa {
+    margin-right: 10px; /* 调整间距 */
+}
+.tag-name-div {
+    font-size: 20px;
+    text-align: justify;
+    color: #6d9ee7;
+    margin-bottom: 10px;
+}

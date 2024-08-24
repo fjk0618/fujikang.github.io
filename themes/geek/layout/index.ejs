@@ -7,22 +7,22 @@
             <ol class="post-nav">
                 <li>
                     <span class="post-meta-item-icon">
-                        <i class="fa fa-user">&nbsp&nbsp&nbsp<%=post.author%></i>
+                        <i class="fa fa-user">&nbsp;&nbsp;&nbsp;<%=post.author%></i>
                     </span>
                 </li>
                 
                 <li>
                     <span class="post-meta-item-icon">
-                        <i class="fa  fa-calendar-check-o">&nbsp&nbsp&nbsp<%=date(post.date)%></i>
+                        <i class="fa  fa-calendar-check-o">&nbsp;&nbsp;&nbsp;<%=date(post.date)%></i>
                     </span>
                 </li>
                 <li>
                     <span class="post-meta-item-icon">
                         <i class="fa fa-folder-o">
-                            &nbsp&nbsp&nbsp
+                            &nbsp;&nbsp;&nbsp;
                             <%post.categories.each(function(category){%>
-                                <a href="/categories/<%=category.name%>" class="ba">
-                                    <%=category.name%>/
+                                <a href="/categories/<%=category.name%>" class="ba category-list">
+                                    <%=category.name%>
                                 </a>
                             <%})%>
                         </i>
