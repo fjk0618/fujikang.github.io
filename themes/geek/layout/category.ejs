@@ -1,0 +1,35 @@
+<div class="hd category-body">
+<% if(is_category()){ %>
+    <div class="category-name-div">
+        <span class="category-name-span" >
+            <%=page.category%>
+            <span>分类下的所有文章</span>
+        </span>
+    </div>
+    <% page.posts.each(function (post) { %>
+        
+        <a class="flink" href="<%- url_for(post.path) %>">
+            <div class="list">
+                <div class="postname">
+                    <%= post.title %>
+                </div>
+                <div class="posttime">
+                    <%- date(post.date) %>
+                </div>
+            </div>
+        </a>
+    <% }) %>
+    <!-- 仅在分页大于1页时展示分页数据 -->
+    <!--页码-->
+    <section class="page-navigator">
+        <%-paginator({
+            prev_text: '«',
+            next_text: '»',
+        })%>
+    </section>
+<% }else{ %>
+    <%- list_categories() %>
+<% } %>
+</div>
+
+  

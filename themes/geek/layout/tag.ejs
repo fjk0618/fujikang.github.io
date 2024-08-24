@@ -2,7 +2,8 @@
     <% if(is_tag()){ %>
         <div class="tag-name-div">
             <span class="tag-name-span" >
-                <%=page.tag%>&nbsp;标签下的所有文章
+                <%=page.tag%>
+                <span>标签下的所有文章</span>
             </span>
         </div>
         <% page.posts.each(function (post) { %>
