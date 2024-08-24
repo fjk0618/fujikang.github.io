@@ -1,6 +1,9 @@
 ---
 title: {{ title }}
 date: {{ date }}
-tags:
 author: fjk
+categories:
+  - [default]
+tags:
+  - default
 ---
