@@ -1,16 +1,72 @@
 
 <div class="hd posts">
-    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <a href="javascript:history.back(-1);">
+        <i class="fa fa-reply replay-btn" aria-hidden="true"></i>
+    </a>
     <div class="post-title">
         <p>
             <%= page.title %>
         </p>
         <hr>
     </div>
+    <div style="height: 80px;width: 100%;">
+        <ol class="post-nav">
+            <li>
+                <span class="post-meta-item-icon">
+                    <i class="fa fa-user">&nbsp;&nbsp;&nbsp;<%=page.author%></i>
+                </span>
+            </li>
+            
+            <li>
+                <span class="post-meta-item-icon">
+                    <i class="fa  fa-calendar-check-o">&nbsp;&nbsp;&nbsp;<%=date(page.date)%></i>
+                </span>
+            </li>
+            <li>
+                <span class="post-meta-item-icon">
+                    <i class="fa  fa-eye">&nbsp;&nbsp;&nbsp;
+                        <span id="busuanzi_container_page_pv">
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </i>
+                </span>
+            </li>
+            <li>
+                <span class="post-meta-item-icon">
+                    <i class="fa fa-folder-o">
+                        &nbsp;&nbsp;&nbsp;
+                        <%page.categories.each(function(category){%>
+                            <a href="/categories/<%=category.name%>" class="ba nav-category-list">
+                                <%=category.name%>
+                            </a>
+                        <%})%>
+                    </i>
+                </span>
+            </li>
+        </ol>
+    </div>
     <div class="post-content">
         <%- page.content %>
     </div>
 
+    <div class=post-foot-nav>
+        <% if (page.prev){ %>
+            <div class='post-foot-nav-item'>
+                <a href='<%- url_for(page.prev.path) %>'>
+                    <i class="fa fa-chevron-left"></i>
+                    <%= page.prev.title %>
+                </a>
+            </div>
+        <% } %>
+        <% if (page.next){ %>
+            <div class='post-foot-nav-item'>
+                <a href='<%- url_for(page.next.path) %>'>
+                    <%= page.next.title %>
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        <% } %>
+    </div>
     <% if (theme.valine.enable && page.comments) { %>
         <hr class="fhr">
         <div id="vcomments"></div>

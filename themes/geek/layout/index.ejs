@@ -21,7 +21,7 @@
                         <i class="fa fa-folder-o">
                             &nbsp;&nbsp;&nbsp;
                             <%post.categories.each(function(category){%>
-                                <a href="/categories/<%=category.name%>" class="ba category-list">
+                                <a href="/categories/<%=category.name%>" class="ba nav-category-list">
                                     <%=category.name%>
                                 </a>
                             <%})%>
@@ -35,7 +35,7 @@
                 <%=post.excerpt%>
             </div>
             <div class="post-button text-center">
-                <a class="btn" href="<%=post.path%>/#more" rel="contents">
+                <a class="btn" href="<%=post.path%>" rel="contents">
                   More »
                 </a>
             </div>
