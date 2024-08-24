@@ -7,7 +7,7 @@ favicon: /favicon.ico
 menu:
   Home: /
   Archive: /archives
-  Category: /category
+  Category: /categories
   Tag: /tags
   Github: https://github.com/fujikang
 
