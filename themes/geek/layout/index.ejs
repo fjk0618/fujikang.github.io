@@ -1,0 +1,55 @@
+<div class="hd post-div">
+    <% page.posts.each(function (post) { %>
+        <p class="logot">
+            <%= post.title %>
+        </p>
+        <div class="hd">
+            <ol class="post-nav">
+                <li>
+                    <span class="post-meta-item-icon">
+                        <i class="fa fa-user">&nbsp&nbsp&nbsp<%=post.author%></i>
+                    </span>
+                </li>
+                
+                <li>
+                    <span class="post-meta-item-icon">
+                        <i class="fa  fa-calendar-check-o">&nbsp&nbsp&nbsp<%=date(post.date)%></i>
+                    </span>
+                </li>
+                <li>
+                    <span class="post-meta-item-icon">
+                        <i class="fa fa-folder-o">
+                            &nbsp&nbsp&nbsp
+                            <%post.categories.each(function(category){%>
+                                <a href="/categories/<%=category.name%>" class="ba">
+                                    <%=category.name%>/
+                                </a>
+                            <%})%>
+                        </i>
+                    </span>
+                </li>
+            </ol>
+        </div>
+        <div>
+            <div>
+                <%=post.excerpt%>
+            </div>
+            <div class="post-button text-center">
+                <a class="btn" href="<%=post.path%>/#more" rel="contents">
+                  More »
+                </a>
+            </div>
+        </div>
+       
+        
+        
+    <% }) %>
+</div>
+<!-- 仅在分页大于1页时展示分页数据 -->
+<!--页码-->
+<section class="page-navigator">
+    <%-paginator({
+      prev_text: '«',
+      next_text: '»',
+    })%>
+</section>

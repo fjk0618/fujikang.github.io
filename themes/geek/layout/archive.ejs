@@ -1,0 +1,33 @@
+
+<div class="hd">
+    <% var last; %>
+    <% page.posts.each(function (post) { %>
+        <% var year = post.date.year(); %>
+        <% if (last != year){ %>
+            <div class="titlex">
+                <p><span class="jing"><%= year %></span>
+                    
+                </p>
+            </div>
+            <% last = year; %>
+        <% } %>
+        <a class="flink" href="<%- url_for(post.path) %>">
+            <div class="list">
+                <div class="postname">
+                    <%= post.title %>
+                </div>
+                <div class="posttime">
+                    <%- date(post.date) %>
+                </div>
+            </div>
+        </a>
+    <% }) %>
+</div>
+<!-- 仅在分页大于1页时展示分页数据 -->
+<!--页码-->
+<section class="page-navigator">
+    <%-paginator({
+      prev_text: '«',
+      next_text: '»',
+    })%>
+</section>

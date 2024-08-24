@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        Hexo
+    </title>
+    <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="hd logodiv">
+    <img src="/img/logo.png" class="logopng">
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;float: right;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+        <p class="logot"><span class="logo_1">&lt;</span><span class="logo_2">/</span><span class="logo_3">#</span>
+            GEEK kang <span class="logo_3">#</span><span class="logo_2">/</span><span
+                    class="logo_1">&gt;</span>
+        </p>
+</div>
+<div class="hd">
+    <ol class="breadcrumb">
+        
+            <li><a class="ba" href="/">Home</a></li>
+        
+            <li><a class="ba" href="/archives">Archive</a></li>
+        
+            <li><a class="ba" href="/categories">Category</a></li>
+        
+            <li><a class="ba" href="/tags">Tag</a></li>
+        
+            <li><a class="ba" target="_blank" rel="noopener" href="https://github.com/fujikang">Github</a></li>
+        
+    </ol>
+    <hr class="breadcrumbhr">
+</div>
+
+<body id="bodyx">
+    
+<div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            first
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="本篇博文是操作系统基础系列之一；本文为作者的原创作品，转载需注明出处；"><a href="#本篇博文是操作系统基础系列之一；本文为作者的原创作品，转载需注明出处；" class="headerlink" title="本篇博文是操作系统基础系列之一；本文为作者的原创作品，转载需注明出处；"></a>本篇博文是操作系统基础系列之一；本文为作者的原创作品，转载需注明出处；</h2><h3 id="Stack-栈的工作原理"><a href="#Stack-栈的工作原理" class="headerlink" title="Stack 栈的工作原理"></a>Stack 栈的工作原理</h3><h4 id="后进先出"><a href="#后进先出" class="headerlink" title="后进先出"></a>后进先出</h4><h6 id="工作原理如下图所示，"><a href="#工作原理如下图所示，" class="headerlink" title="工作原理如下图所示，"></a>工作原理如下图所示，</h6><p>how stack works可以将栈看做是一个队列，只是里面的队列的元素满足“后进先出”的原则，如果硬要找一个类比，就它吧，</p>
+<p>how stack works simulate</p>
+<p>x86 栈的工作原理<br>x86 栈的模型<br>head down<br>x86 中，栈的工作模式被称为 “head down” 既是“头朝下”的一种内存模型，如图，</p>
+<p>x86 - stack - head down</p>
+<p>一个栈从 x86 内存的堆栈区（SS）的某个位置开始，向低地址逐渐增长；因此，在 x86 的栈模型中，栈顶指的其实就是指该栈所在内存区域的最低地址，相反，栈底指的就是对应内存的最高地址；</p>
+<p>栈单元<br>8086 既是 IA-16 的架构下，一个栈单元等于 2 个内存单元，既 2 字节<br>IA-32 或 IA-64 的架构下，一个栈单元等于 4 个内存单元，既 4 字节<br>备注，这里的栈单元只是对 push 和 pop 指令的描述，一次 push 或者 pop 操作，针对 IA-32 而言，指针是移动 4 个内存单元，但不意味着变量就必须被定义为 4 个内存单元，比如 c 中的 short 变量，只占用 2 个字节；下面简单看一下 short 变量翻译成汇编后，它是如何在栈中给它分配内存空间的，<br>z.s</p>
+<p>int main()<br>{<br>    short b &#x3D; 1;<br>    short a &#x3D; 2;<br>    return a+b;<br>}<br>在 IA-32 编译后，得到的汇编指令大致如下，</p>
+<p>_main:                                  ## @main<br>   push  ebp<br>   mov   ebp, esp<br>   ; 给 main 函数的本地变量预留空间，<br>   ; 这里只需要为两个 short 变量分配 4 个字节空间<br>   ;<br>   sub   esp, 4<br>   ; 给变量 b 进行初始化，b &#x3D; 1；注意 WORD PTR 表示一个字，既表示占用两个字节<br>   ;<br>   mov   WORD PTR [ebp - 2], 0<br>   ; 给变量 a 进行初始化，a &#x3D; 2<br>   ;<br>   mov   WORD PTR [ebp - 4], 1<br>   ; 将变量 b 赋值给寄存器，准备计算<br>   ;<br>   mov   eax, word ptr [rbp - 4]<br>   ; 将变量 a 赋值给寄存器，准备计算<br>   ;<br>   mov   ecx, word ptr [rbp - 2]<br>   add eax, ecx<br>   ; 还原 esp<br>   mov esp, ebp<br>   pop ebp<br>   ret<br>可见，当某个变量的大小小于栈单元的时候，使用 WORD PTR、BYTE PRT 对被赋值的内存指定即可；</p>
+<p>x86 栈的工作方式<br>ESP<br>x86 中有一个保留的寄存器 ESP，Extended Stack Pointer，它始终存放着栈顶地址，如图，假设，这是某个栈的当前状态，</p>
+<p>x86 - stack - esp 1假设栈顶存放着字符串“foo”，则 ESP 中保存着栈顶的地址0x9080ABCC（行话常叫做 ESP 指向栈顶元素）；</p>
+<p>备注，该指针在不同的硬件架构上的叫法不同，</p>
+<p>SP<br>x86_16 中的寄存器名称, Extended Stack Point<br>ESP<br>x86_32 中的寄存器名称, Extended Stack Point<br>RSP<br>x86_64 中的寄存器名称<br>push<br>push 指令向栈顶新增数据，示例，</p>
+<p>push eax<br>假设 eax 寄存器中存放的是0xDEADBEEF，push 之后，栈的当前状态如图所示，</p>
+<p>x86 - stack - after push可以看到，新的数据0xDEADBEEF放到了栈顶位置，同时 ESP 向下移动了一个栈单元继续指向栈顶的位置；因此，这个 push 指令实际上做了两件事情，</p>
+<p>sub esp, 4<br>mov [esp], eax<br>先是向栈顶移动一个栈单元，</p>
+<p>sub esp, 4<br>因为栈顶对应的是低地址，因此这里需要用 sub 指令减去一个栈单元的大小</p>
+<p>因为这里使用的是 32 位的寄存器，因此一个栈单元对应 4 个内存单元，因此，这里需要减 4</p>
+<p>然后，将 eax 中的值赋值给 esp 所指向的内存单元中去（需要连续 4 个内存单元来存放）<br>mov [esp], eax<br>这样，我们便完成了一次 push 操作，记住，将数据添加到栈顶的同时，ESP 也同样需要向栈顶移动一个栈单元，保证它始终是指向栈顶的；</p>
+<p>pop<br>pop 弹出栈顶元素，示例，我们继续上一小节 push 的例子，</p>
+<p>pop eax<br>我们将栈顶元素弹出并保存到 eax 中后，当前堆栈如图所示，</p>
+<p>x86 - stack - after pop可以看到，当栈顶元素弹出以后，ESP 回退一个栈单元，继续指向栈顶，但，要注意的是，虽然栈顶元素已经被弹出，但它并不会从内存中清空；pop 指令等价于做了如下两件事</p>
+<p>mov eax, [esp]<br>add esp, 4<br>先将 esp 所指向的栈单元（连续的 4 个内存单元）赋值给 eax，然后 esp 的地址回退一个栈单元；</p>
+<p>C 函数详细的调用过程<br>栈是函数调用的核心，函数的参数和返回值是通过栈的方式在函数之间进行存储和传递的，看一个例子，<br>z.c</p>
+<p>int foobar(int a, int b, int c)<br>{<br>    int xx &#x3D; a + 2;<br>    int yy &#x3D; b + 3;<br>    int zz &#x3D; c + 4;<br>    int sum &#x3D; xx + yy + zz;</p>
+<pre><code>return xx * yy * zz + sum;
+</code></pre>
+<p>}</p>
+<p>int main()<br>{<br>    int b &#x3D; 1;<br>    int a &#x3D; foobar(77, 88, 99);<br>    return a+b;<br>}<br>使用 gcc 编译</p>
+<p>gcc -masm&#x3D;intel -S z.c -o z.s<br>编译后得到相关的汇编代码 z.s 的内容如下，（注意，这是在 IA-32 环境下编译后得到的结果）</p>
+<p>_foobar:<br>    ; ebp 是调用函数 _main 的基地址<br>    ;<br>    push    ebp</p>
+<pre><code>; From now on, ebp points to the current stack
+; frame of the function
+;
+mov     ebp, esp
+
+; Make space on the stack for local variables
+;
+sub     esp, 16
+
+; eax &lt;-- a. eax += 2. then store eax in xx
+;
+mov     eax, DWORD PTR [ebp+8]
+add     eax, 2
+mov     DWORD PTR [ebp-4], eax
+
+; eax &lt;-- b. eax += 3. then store eax in yy
+;
+mov     eax, DWORD PTR [ebp+12]
+add     eax, 3
+mov     DWORD PTR [ebp-8], eax
+
+; eax &lt;-- c. eax += 4. then store eax in zz
+;
+mov     eax, DWORD PTR [ebp+16]
+add     eax, 4
+mov     DWORD PTR [ebp-12], eax
+
+; add xx + yy + zz and store it in sum
+;
+mov     eax, DWORD PTR [ebp-8]
+mov     edx, DWORD PTR [ebp-4]
+lea     eax, [edx+eax]
+add     eax, DWORD PTR [ebp-12]
+mov     DWORD PTR [ebp-16], eax
+
+; Compute final result into eax, which
+; stays there until return
+;
+mov     eax, DWORD PTR [ebp-4]
+imul    eax, DWORD PTR [ebp-8]
+imul    eax, DWORD PTR [ebp-12]
+add     eax, DWORD PTR [ebp-16]
+
+; The leave instruction here is equivalent to:
+;
+;   mov esp, ebp
+;   pop ebp
+;
+; Which cleans the allocated locals and restores ebp.
+;
+leave
+ret
+</code></pre>
+<p>_main:                                  ## @main<br>   ; ebp 是调用 _main 函数的函数的栈基址，将其保存，以便 _main 函数退出后恢复该函数的栈基址<br>   ; 压栈后，同时 esp &#x3D; esp - 4；<br>   ;<br>   push  ebp<br>   ; 此时的 esp 就是 _main 函数的栈基址既 _main 函数栈开始的地方，将其赋值给 ebp 作为栈基址保存<br>   ;<br>   mov   ebp, esp<br>   ; 给 main 函数的本地变量预留空间，<br>   ; 这里需要预留三个本地变量的空间，a、b 以及 _foobar 的返回值，也就是 3 个栈单元，因此 -12<br>   ;<br>   sub   esp, 12<br>   ; 给变量 a 进行初始化，a &#x3D; 0；<br>   ; 可见，虽然没有在 c 代码中明确初始化便令，但是编译器会做这件事<br>   ;<br>   mov   DWORD PTR [ebp - 4], 0<br>   ; 给变量 b 进行初始化，b &#x3D; 1<br>   ;<br>   mov   DWORD PTR [ebp - 8], 1<br>   ; 准备 call _foobar 函数，对调用参数77、88、99 从右至左依次压栈<br>   ;<br>   mov   DWORD PTR [esp], 77<br>   mov   DWORD PTR [esp + 4], 88<br>   mov   DWORD PTR [esp + 8], 99<br>   ; call _foobar，call 函数做了如下几件事情<br>   ; 1) 将下一条指令的地址作为 return address 压栈<br>   ; 2) jump to _footbar<br>   ;<br>   call  _foobar<br>   ; 向上回退 3 个栈单元，跳过 _foobar 调用参数，既完全退出 _foobar 的栈帧部分<br>   ;<br>   add esp, 12<br>   ; eax 保存的是 _foobar 函数的返回值，赋值给栈的第 3 个栈单元<br>   ;<br>   mov   DWORD PTR [ebp - 12], eax<br>   mov   eax, DWORD PTR [ebp - 12]<br>   ; 实现 b + _foobar 的返回值，将结果存放在 eax 中<br>   ;<br>   add   eax, DWORD PTR [ebp - 8]<br>   ; 相当于执行<br>   ; mov   esp, ebp<br>   ; pop   ebp<br>   ; 然后清空 _main 栈帧<br>   ;<br>   leave<br>   ret<br>假设，某个系统的方法 𝛼<br> 调用了该 main 函数，然后 main 函数又调用了 foobar 函数，因此调用关系链为，<br>𝛼→main→foobar<br>调用过程笔者通过注解的方式已经写得非常清楚了，这里我们通过图解的方式看重点，</p>
+<p>main 函数执行过程<br>首先，来看 main 函数中的执行过程，</p>
+<p>push ebp<br>将调用 main 的某方法 𝛼<br> 的栈基址进行压栈，如图，esp 指向栈顶<br>stack call process<br>mov ebp, esp<br>创建 main 函数的栈基址，并将栈基址地址赋值给 ebp 保存，<br>stack call process此时，esp 和 ebp 均指向栈顶<br>sub esp, 12<br>通过将 esp 向下移动 3 个栈单元为 main 函数的 3 个局部变量分配空间<br>stack call process此时 esp 指向栈顶，并且为局部变量a、b和foobar函数的返回值预留了三个空的栈单元；<br>mov DWORD PTR [ebp - 4], 0<br>初始化a<br>stack call process<br>mov DWORD PTR [ebp - 8], 0<br>初始化b<br>stack call process<br>准备调用 _foobar，将调用 foobar 函数的三个参数从右至左分别压栈<br>压入参数 99,<br>stack call proc压入参数 88,<br>stack call proc压入参数 77,<br>stack call proc<br>call _foobar<br>做了如下两件事情，<br>然后将 call 指令的下一条指令既 add esp, 12 的指令地址作为 return address 进行压栈<br>stack call proc当 foobar 函数退出后，将会跳转到该指令地址上去执行；<br>然后，跳转到 _foobar 地址上去执行，既 jmp _foobar，该步骤之后的详细流程参考 foobar 函数执行过程<br>foobar 函数执行过程<br>push ebp<br>将 main 函数的栈基址压栈保存，<br>stack call proc<br>mov ebp, esp<br>创建 foobar 函数的栈基址 ebp，<br>stack call proc<br>sub esp, 16<br>为 foobar 函数在其栈中分配相应的局部变量空间，这里需要分配 4 个栈单元<br>stack call proc<br>实现 xx &#x3D; a+2 并将其结果放到 xx 栈单元中</p>
+<p>mov     eax, DWORD PTR [ebp+8]<br>add     eax, 2<br>mov     DWORD PTR [ebp-4], eax<br>stack call proc<br>同理，yy &#x3D; b + 3 和 zz &#x3D; c + 4 也分别放到所对应的栈单元中，如图，<br>stack call proc<br>最后，完成 sum &#x3D; xx + yy + zz 并将结果放在 sum 所对应的栈单元中，<br>stack call proc注意，这里有一个很重要的概念，如图，蓝色部分被称为一个栈帧，它包含了一个函数在栈中所关联的所有信息；<br>这一步相关的汇编指令如下，</p>
+<p>mov     eax, DWORD PTR [ebp-8]<br>mov     edx, DWORD PTR [ebp-4]<br>lea     eax, [edx+eax]<br>add     eax, DWORD PTR [ebp-12]<br>mov     DWORD PTR [ebp-16], eax<br>注意，sum 的结果同时也保存在 eax 中的；</p>
+<p>执行，xx * yy * zz + sum，</p>
+<p>mov     eax, DWORD PTR [ebp-4]<br>imul    eax, DWORD PTR [ebp-8]<br>imul    eax, DWORD PTR [ebp-12]<br>add     eax, DWORD PTR [ebp-16]<br>结果依然保存在 eax 中，</p>
+<p>leave<br>leave 指令分别做了如下两件事情，</p>
+<ol>
+<li>重定位 esp，使其指向 foobar 栈基址的位置，</li>
+</ol>
+<p>mov esp, ebp<br>stack call proc这一步也就等价于删除了 sum、xx、yy 和 zz 的栈单元；</p>
+<ol start="2">
+<li>通过 pop ebp 恢复 main 函数的栈基址<br>stack call proc这一步等价于删除了 main’s ebp 栈单元；<br>ret<br>弹出 return address，然后跳转到该地址取址执行，等价于执行如下两条命令，</li>
+</ol>
+<p>pop edx<br>jmp edx<br>注意，前面提到过，在call _foobar的时候，会顺序将下一条指令，也就是add esp, 12，的地址进行压栈，因此，这里就是跳转到该命令去执行；</p>
+<p>通过 ret 我们既回到了 main 函数的栈帧中去执行了，</p>
+<p>回到 main 函数后的执行过程<br>add esp, 12<br>由 ret 指令跳转回 main 函数后跳转执行的第一条指令；向栈底移动 3 个栈单元，既是完全退出 _foobar 栈帧部分，使得 esp 指向 main 在调用 _foobar 之前的栈顶位置，也就是还原 main 函数栈顶指针 esp，<br>stack call proc备注，通过 gcc 生成 x86_64 的汇编指令的做法不同，得益于更多的寄存器可以使用，它是先将这三个 foobar 函数的调用参数赋值给三个寄存器中，生成的内容大致如下，</p>
+<p>_main:                                  ## @main<br>   …<br>   mov   edi, 77<br>   mov   esi, 88<br>   mov   edx, 99<br>   call  _foobar<br>可见，在调用 foobar 之前，将三个参数分别赋值给 adi、esi 和 edx 三个寄存器临时存储，然后在 foobar 中将这些参数分别赋值给堆栈中指定的位置即可，</p>
+<p>_foobar:                                ## @foobar<br>   …<br>   mov   dword ptr [rbp - 4], edi<br>   mov   dword ptr [rbp - 8], esi<br>   mov   dword ptr [rbp - 12], edx<br>这样做的好处是，我们会得到一个不同的栈结构，如图所示，<br>stack call proc这样，call 指令只需压入 return address 即可，从而，使得还原 main 函数的栈顶指针 esp 会变得异常的简单，只需要步骤 8.1 中通过 mov esp, ebp 重定位 esp 即可；</p>
+<p>将 foobar 的返回值赋值给 main 栈帧中的第三个本地变量中</p>
+<p>mov   DWORD PTR [ebp - 12], eax<br>foobar 的返回值 sum 保存在 eax 中，当前栈帧如图所示，黄色部分表示 main 函数的栈帧<br>stack call proc<br>a+b等价于b+foobar()的返回值，等价的汇编执行如下所示，</p>
+<p>add   eax, DWORD PTR [ebp - 8]<br>注意，结果依然是存放在 eax 中的，</p>
+<p>leave<br>同 foobar 执行过程一样，重定位 esp 到 main 的栈基址的位置，然后通过 pop ebp 恢复函数 𝛼<br> 的栈基址<br>ret<br>同 foobar 执行过程一样，恢复 𝛼<br> 的栈顶指针 esp，然后跳转到 return address 上取址执行<br>回到 𝛼<br> 函数后的执行过程<br>这个过程就好比 foobar→main<br> 返回执行过程，main 开始执行剩下的部分一样，不再赘述！</p>
+<p>栈<br>如图，<br>stack call procfoobar 函数所对应的栈是由 ebp 所指向的栈底和 esp 所指向的栈顶的部分构成的，注意，蓝色部分对应的是 foobar 函数所对应的栈帧</p>
+<p>ebp<br>x86 的一个保留寄存器，专门用于保存栈基址，它一直指向栈的开始处；</p>
+<p>esp<br>x86 的一个保留寄存器，专门用于保存栈顶地址，它一直指向栈的最顶部；并且，它就像一个游标一样，当有新的栈元素添加以后，自动的指向这个新的栈单元上；</p>
+<p>栈帧<br>在推导 foobar 函数的执行过程中，可以看到，由 foobar 的局部变量、return address 等构成了一个栈帧，如图所示，<br>stack call proc可见，一个函数栈帧的栈单元要比它的栈的栈单元多；这个示例中，栈帧中多出的栈单元分别是 77、88、99 和 return address 这 4 个栈单元；</p>
+<p>函数的嵌套调用<br>函数中调用另外一个函数是编程的基础，无论是面向过程还是面向对象，都需要这样的机制，在硬件层面，就是通过栈来实现任意多层函数的嵌套调用的，所以，它的意义非常的巨大！</p>
+<p>备注，通常，我们在调试代码的时候，调试中所打印出来的函数调用的层次关系，就是从对应线程的栈中输出的；</p>
+<p>Stack Overflow<br>一般而言，一个程序运行时所使用的栈的大小是有限制的，比如最早的 8086，一个程序运行所能使用的栈大小最多只有 64K，所以，如果当函数嵌套调用的层次过多，分配的栈空间超过了这个最大容量限制，那么必然导致栈溢出既 Stack Overflow；</p>
+<p>比如 JVM 默认把每个线程能够使用的栈空间的最大值设为 256K，以便能够同时启动多个线程，但是，256K 对于一些复杂的嵌套调用，特别是复杂的递归调用是不够的，因此，往往我们需要通过设置将占空间调大，比如 java -Xss1M，这样使得每个线程能够使用最多 1M 空间的栈；</p>
+<p>程序运行的结构体系：cs + ss<br>在我的脑海里突然出现了这样的一幅完整的场景，</p>
+<p>cs 段的存储器提供了程序执行的指令<br>ss 段的存储器提供了程序运行的环境<br>References<br>call 指令<br><a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-66/index.html">https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-66/index.html</a><br><a target="_blank" rel="noopener" href="https://www.aldeid.com/wiki/X86-assembly/Instructions/call">https://www.aldeid.com/wiki/X86-assembly/Instructions/call</a><br><a target="_blank" rel="noopener" href="https://c9x.me/x86/html/file_module_x86_id_26.html">https://c9x.me/x86/html/file_module_x86_id_26.html</a><br>ret 指令<br><a target="_blank" rel="noopener" href="https://stackoverflow.comquestions/20129107/what-is-the-x86-ret-instruction-equivalent-to">https://stackoverflow.comquestions/20129107/what-is-the-x86-ret-instruction-equivalent-to</a></p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>-<a class="flink" target="_blank" rel="noopener" href="https://github.com/sanjinhub/hexo-theme-geek">Geek</a>.
+        
+        <span id="busuanzi_container_site_pv" >
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            本站访客数<span id="busuanzi_value_site_uv"></span>人次
+        </span>
+    </p>
+</div>
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>

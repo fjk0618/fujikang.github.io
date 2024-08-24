@@ -1,0 +1,25 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        <%= config.title %>
+    </title>
+    <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
+    <%- css('libs/highlight/styles/monokai-sublime.css') %>
+    <%- css('libs/font-awesome/css/font-awesome.min.css') %>
+    <%- css('css/style.css') %>
+</head>
+<div class="hd logodiv">
+    <%- image_tag('img/logo.png',{class: 'logopng' }) %>
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;float: right;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+        <p class="logot"><span class="logo_1">&lt;</span><span class="logo_2">/</span><span class="logo_3">#</span>
+            <%= theme.logo_title %> <span class="logo_3">#</span><span class="logo_2">/</span><span
+                    class="logo_1">&gt;</span>
+        </p>
+</div>
+<%- partial('_partial/nav') %>
