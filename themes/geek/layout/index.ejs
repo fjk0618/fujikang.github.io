@@ -1,7 +1,7 @@
 <div class="hd post-div">
     <% page.posts.each(function (post) { %>
-        <p class="logot">
-            <%= post.title %>
+        <p class="index-post">
+            <a href="<%- url_for(post.path) %>" title="<%= post.title %>"><%= post.title %></a>
         </p>
         <div class="hd">
             <ol class="post-nav">
