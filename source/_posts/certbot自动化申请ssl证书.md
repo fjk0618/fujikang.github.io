@@ -92,8 +92,8 @@ tags:
         --dns-cloudflare \
         --dns-cloudflare-credentials ~/.secret/certbot/cloudflare.ini \
         --dns-cloudflare-propagation-seconds 60 \
-        -d cloudflare.icu \
-        -d *.cloudflare.icu
+        -d "cloudflare.icu" \
+        -d "*.cloudflare.icu"
         ```
       
         <!-- 请把上方命令替换成自己需要申请泛域名证书的域名 -->
